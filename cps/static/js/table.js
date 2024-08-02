@@ -90,6 +90,9 @@ $(function() {
 
                 $("#unarchive_selected_books").removeClass("disabled");
                 $("#unarchive_selected_books").attr("aria-disabled", false);
+
+                $("#edit_selected_books").removeClass("disabled");
+                $("#edit_selected_books").attr("aria-disabled", false);
             } else {
                 $("#delete_selected_books").addClass("disabled");
                 $("#delete_selected_books").attr("aria-disabled", true);
@@ -99,6 +102,9 @@ $(function() {
 
                 $("#unarchive_selected_books").addClass("disabled");
                 $("#unarchive_selected_books").attr("aria-disabled", true);
+
+                $("#edit_selected_books").addClass("disabled");
+                $("#edit_selected_books").attr("aria-disabled", true);
             }
             if (selections.length < 1) {
                 $("#delete_selection").addClass("disabled");
@@ -254,6 +260,28 @@ $(function() {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             url: window.location.pathname + "/../ajax/deleteselectedbooks",
+            data: JSON.stringify({"selections":selections}),
+            success: function success(booTitles) {
+                $("#books-table").bootstrapTable("refresh");
+                $("#books-table").bootstrapTable("uncheckAll");
+            }
+        });
+    });
+
+    $("#edit_selected_books").click(function(event) {
+        if ($(this).hasClass("disabled")) {
+            event.stopPropagation()
+        } else {
+            $('#edit_selected_modal').modal("show");
+        }
+    });
+
+    $("#edit_selected_books_confirm").click(function(event) {
+        $.ajax({
+            method:"post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: window.location.pathname + "/../ajax/editselectedbooks",
             data: JSON.stringify({"selections":selections}),
             success: function success(booTitles) {
                 $("#books-table").bootstrapTable("refresh");
